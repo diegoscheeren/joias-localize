@@ -5,7 +5,6 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import vuetify from './plugins/vuetify'
-import VueTheMask from 'vue-the-mask'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -14,7 +13,6 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 Vue.config.productionTip = (window.location.hostname == 'localhost') ? false : true;
 
-Vue.use(VueTheMask);
 Vue.use(vuetify, {
     iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 });
