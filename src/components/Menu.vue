@@ -38,7 +38,7 @@
 
                 <v-divider dark class="my-4"/>
 
-                <v-list-item link to="/vendas">
+                <v-list-item link @click="pdf">
                     <v-list-item-action>
                         <v-icon>mdi-file-pdf-outline</v-icon>
                     </v-list-item-action>
@@ -75,6 +75,23 @@ export default {
             this.$store.commit('setUsuario', null);
             sessionStorage.clear();
             this.$router.push('/login');
+        },
+        pdf() {
+            var doc = this.jsPDF()
+
+            var stringHtml = '<table style="width: 140%" border="1"><tr><td>teste</td></tr></table>';
+
+            doc.setFontSize(16);
+            doc.text('Relatório', 95, 15);
+            doc.fromHTML(stringHtml, 15, 15, {
+                'width': 100
+            });
+
+            window.open(doc.output('bloburl'), '_blank');
+
+            // doc.text('<b>Hello world<b>!<i style="color: red">Hello world</i>', 10, 10)
+            // doc.save('vendas.pdf')
+
         }
     }
 };

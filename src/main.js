@@ -4,6 +4,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import moment from 'moment'
+import jsPDF from 'jspdf';
 import vuetify from './plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
@@ -17,6 +19,8 @@ Vue.use(vuetify, {
     iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 });
 
+Vue.prototype.jsPDF = jsPDF
+Vue.prototype.moment = moment
 Vue.prototype.$http = axios
 Vue.prototype.$urlAPI = ((window.location.hostname == 'localhost')
     ? `http://${window.location.hostname}:8000/api/`

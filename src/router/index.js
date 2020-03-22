@@ -6,8 +6,8 @@ import CadastroMarca from '@/pages/cadastro/Marca'
 import Marca from '@/pages/pesquisa/Marca'
 import CadastroModelo from '@/pages/cadastro/Modelo'
 import Modelo from '@/pages/pesquisa/Modelo'
-// import CadastroAnuncio from '@/pages/cadastro/Anuncio'
-// import Anuncio from '@/pages/pesquisa/Anuncio'
+import CadastroAnuncio from '@/pages/cadastro/Anuncio'
+import Anuncio from '@/pages/pesquisa/Anuncio'
 
 Vue.use(VueRouter)
 
@@ -45,16 +45,16 @@ export default new VueRouter({
             name: 'Modelo',
             component: Modelo
         },
-        // {
-        //     path: '/cadastro-anuncio',
-        //     name: 'CadastroAnuncio',
-        //     component: CadastroAnuncio
-        // },
-        // {
-        //     path: '/anuncios',
-        //     name: 'Anuncio',
-        //     component: Anuncio
-        // },
+        {
+            path: '/cadastro-anuncio',
+            name: 'CadastroAnuncio',
+            component: CadastroAnuncio
+        },
+        {
+            path: '/anuncios',
+            name: 'Anuncio',
+            component: Anuncio
+        },
         {
             path: '*',
             redirect: '/'

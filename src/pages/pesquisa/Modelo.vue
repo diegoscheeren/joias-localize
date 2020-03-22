@@ -13,7 +13,8 @@
                                         </v-col>
                                     </v-row>
                                     <v-data-table :headers="headers" :items="dados" sort-by="codigo" class="elevation-1"
-                                        :loading="loading">
+                                        :loading="loading" rowsPerPageText="'tesste'">
+                                        <template slot="no-data">Nenhum registro encontrado</template>
                                         <template v-slot:item.action="{ item }">
                                             <v-icon small class="mr-2" @click="editar(item)">mdi-pencil</v-icon>
                                             <v-icon small @click="excluir(item.id)">mdi-delete</v-icon>
@@ -70,10 +71,7 @@ export default {
             this.$router.push('/cadastro-modelo');
         },
         excluir(id) {
-            this.$http.delete(this.$urlAPI + 'modelo', {data: {id}})
-                .then(() => {
-                    this.consultar;
-                })
+            this.$http.delete(this.$urlAPI + 'modelo', {data: {id}}).then(() => this.consultar())
         }
     },
     components: {

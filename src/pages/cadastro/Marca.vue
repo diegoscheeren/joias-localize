@@ -46,9 +46,6 @@ export default {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
 
-        // eslint-disable-next-line no-console
-        console.log(this.isEdit);
-
         if (this.isEdit) {
             this.id = dados.id;
             this.marca = dados.marca;
@@ -61,17 +58,18 @@ export default {
     },
     methods: {
         salvar() {
-            this.$http.post(this.$urlAPI + 'marca', {
+            let dados = {
                 id: this.id,
                 marca: this.marca,
-            })
-            .then(resp => {
-                if (resp.data.status) {
-                    this.$router.push('/marcas');
-                }
-                // eslint-disable-next-line no-console
-                console.log(resp);
-            });
+            };
+
+            if (this.id) {
+                this.$http.put(this.$urlAPI + 'marca', dados)
+                    .then(resp => resp.data.status && this.$router.push('/marcas'));
+                return;
+            }
+             this.$http.post(this.$urlAPI + 'marca', dados)
+                    .then(resp => resp.data.status && this.$router.push('/marcas'));
         }
     }
 }

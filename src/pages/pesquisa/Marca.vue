@@ -13,7 +13,7 @@
                                         </v-col>
                                     </v-row>
                                     <v-data-table :headers="headers" :items="dados" sort-by="codigo" class="elevation-1"
-                                        :loading="loading">
+                                        :loading="loading" no-data-text="Nenhum registro encontrado">
                                         <template v-slot:item.action="{ item }">
                                             <v-icon small class="mr-2" @click="editar(item)">mdi-pencil</v-icon>
                                             <v-icon small @click="excluir(item.id)">mdi-delete</v-icon>
@@ -54,8 +54,6 @@ export default {
     },
 
     methods: {
-        initialize () {
-        },
         consultar() {
             this.loading = true;
             this.$http.get(this.$urlAPI + 'marca')
@@ -69,10 +67,7 @@ export default {
             this.$router.push('/cadastro-marca');
         },
         excluir(id) {
-            this.$http.delete(this.$urlAPI + 'marca', {data: {id}})
-                .then(() => {
-                    this.consultar;
-                })
+            this.$http.delete(this.$urlAPI + 'marca', {data: {id}}).then(() => this.consultar())
         }
     },
     components: {

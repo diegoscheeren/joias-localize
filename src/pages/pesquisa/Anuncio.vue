@@ -9,7 +9,7 @@
                                 <v-card-text align="center" justify="center">
                                     <v-row>
                                         <v-col cols="12">
-                                            <label>MODELOS</label>
+                                            <label>ANÚNCIOS</label>
                                         </v-col>
                                     </v-row>
                                     <v-data-table :headers="headers" :items="dados" sort-by="codigo" class="elevation-1"
@@ -23,7 +23,7 @@
                                 <v-card-actions>
                                     <v-spacer />
                                     <v-btn text link to="/">Voltar</v-btn>
-                                    <v-btn text color="primary" link to="/cadastro-modelo">Novo</v-btn>
+                                    <v-btn text color="primary" link to="/cadastro-anuncio">Novo</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-col>
@@ -38,15 +38,21 @@
 import BaseContainer from '@/components/BaseContainer'
 
 export default {
-    name: 'Modelo',
+    name: 'Anuncio',
     data: () => ({
         loading: true,
         dados: [],
         dialog: false,
         headers: [
             { text: 'Códgio', align: 'start', sortable: false, value: 'id' },
-            { text: 'Modelo', value: 'modelo' },
-            { text: 'Marca', value: 'marca.marca' },
+            { text: 'Modelo', value: 'modelo.modelo' },
+            { text: 'Marca', value: 'marca' },
+            { text: 'Ano', value: 'ano' },
+            { text: 'Valor de Compra', value: 'valor_compra' },
+            { text: 'Valor de Venda', value: 'valor_venda' },
+            { text: 'Cor', value: 'cor' },
+            { text: 'Tipo de Combustivel', value: 'tipo_combustivel' },
+            { text: 'Data da Venda', value: 'data_venda' },
             { text: 'Ações', value: 'action', sortable: false },
         ],
     }),
@@ -59,7 +65,7 @@ export default {
         },
         consultar() {
             this.loading = true;
-            this.$http.get(this.$urlAPI + 'modelo')
+            this.$http.get(this.$urlAPI + 'anuncio')
                 .then(resp => {
                     this.loading = false;
                     this.dados = resp.data.data;
@@ -67,13 +73,10 @@ export default {
         },
         editar(row) {
             this.$store.commit('setData', row);
-            this.$router.push('/cadastro-modelo');
+            this.$router.push('/cadastro-anuncio');
         },
         excluir(id) {
-            this.$http.delete(this.$urlAPI + 'modelo', {data: {id}})
-                .then(() => {
-                    this.consultar;
-                })
+            this.$http.delete(this.$urlAPI + 'anuncio', {data: {id}}).then(() => this.consultar())
         }
     },
     components: {

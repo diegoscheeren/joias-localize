@@ -17,7 +17,6 @@
                                         <input v-model="id" type="hidden">
                                         <v-text-field label="Modelo" v-model="modelo"></v-text-field>
                                         <v-select label="Marca" dense :items="marcas" item-value="id" item-text="marca" v-model="marca"></v-select>
-                                        <!-- <v-text-field label="Marca" v-model="marca"></v-text-field> -->
                                     </div>
                                 </v-card-text>
                                 <v-card-actions>
@@ -50,9 +49,6 @@ export default {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
 
-        // eslint-disable-next-line no-console
-        console.log(this.isEdit);
-
         if (this.isEdit) {
             this.id = dados.id;
             this.modelo = dados.modelo;
@@ -67,18 +63,21 @@ export default {
     },
     methods: {
         salvar() {
-            this.$http.post(this.$urlAPI + 'modelo', {
+            let dados = {
                 id: this.id,
                 modelo: this.modelo,
-                marca: this.marca,
-            })
-            .then(resp => {
-                if (resp.data.status) {
-                    this.$router.push('/modelos');
-                }
-                // eslint-disable-next-line no-console
-                console.log(resp);
-            });
+                marca: this.marca.id,
+            };
+
+            if (this.id) {
+                this.$http.put(this.$urlAPI + 'modelo', dados)
+                    .then(resp => resp.data.status && this.$router.push('/modelos'));
+                return;
+            }
+
+            this.$http.post(this.$urlAPI + 'modelo', dados)
+                    .then(resp => resp.data.status && this.$router.push('/modelos'));
+                return;
         },
         setMarcas() {
             this.$http.get(this.$urlAPI + 'marca').then(resp => (this.marcas = resp.data.data))
