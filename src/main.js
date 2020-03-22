@@ -12,7 +12,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = (window.location.hostname == 'localhost') ? false : true;
 
 Vue.use(VueTheMask);
 Vue.use(vuetify, {
