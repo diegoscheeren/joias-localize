@@ -8,6 +8,7 @@ import CadastroModelo from '@/pages/cadastro/Modelo'
 import Modelo from '@/pages/pesquisa/Modelo'
 import CadastroAnuncio from '@/pages/cadastro/Anuncio'
 import Anuncio from '@/pages/pesquisa/Anuncio'
+import VendasReport from '@/pages/relatorio/VendasReport'
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,11 @@ export default new VueRouter({
             path: '/anuncios',
             name: 'Anuncio',
             component: Anuncio
+        },
+        {
+            path: '/relatorio-vendas',
+            name: 'VendasReport',
+            component: VendasReport
         },
         {
             path: '*',
