@@ -66,7 +66,7 @@ export default {
             let dados = {
                 id: this.id,
                 modelo: this.modelo,
-                marca: this.marca.id,
+                marca: (this.id ? this.marca.id : this.marca),
             };
 
             if (this.id) {
