@@ -3,7 +3,7 @@ module.exports = {
         'vuetify',
     ],
     pwa: {
-        name: 'Veiculos',
+        name: 'LocalizeSJ',
         msTileColor: '#6565bf',
         themeColor: '#f6f6f6',
         workboxPluginMode: 'InjectManifest',
