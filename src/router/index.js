@@ -2,13 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/pages/login/Login'
 import Home from '@/pages/home/Home'
-import CadastroMarca from '@/pages/cadastro/Marca'
-import Marca from '@/pages/pesquisa/Marca'
-import CadastroModelo from '@/pages/cadastro/Modelo'
-import Modelo from '@/pages/pesquisa/Modelo'
-import CadastroAnuncio from '@/pages/cadastro/Anuncio'
-import Anuncio from '@/pages/pesquisa/Anuncio'
-import VendasReport from '@/pages/relatorio/VendasReport'
+import CadastroItem from '@/pages/cadastro/Item'
+import Item from '@/pages/pesquisa/Item'
 
 Vue.use(VueRouter)
 
@@ -27,39 +22,14 @@ export default new VueRouter({
             component: Login
         },
         {
-            path: '/cadastro-marca',
-            name: 'CadastroMarca',
-            component: CadastroMarca
+            path: '/cadastro-item',
+            name: 'CadastroItem',
+            component: CadastroItem
         },
         {
-            path: '/marcas',
-            name: 'Marca',
-            component: Marca
-        },
-        {
-            path: '/cadastro-modelo',
-            name: 'CadastroModelo',
-            component: CadastroModelo
-        },
-        {
-            path: '/modelos',
-            name: 'Modelo',
-            component: Modelo
-        },
-        {
-            path: '/cadastro-anuncio',
-            name: 'CadastroAnuncio',
-            component: CadastroAnuncio
-        },
-        {
-            path: '/anuncios',
-            name: 'Anuncio',
-            component: Anuncio
-        },
-        {
-            path: '/relatorio-vendas',
-            name: 'VendasReport',
-            component: VendasReport
+            path: '/itens',
+            name: 'Item',
+            component: Item
         },
         {
             path: '*',

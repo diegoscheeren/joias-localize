@@ -18,7 +18,7 @@ export default {
         }
     },
     created() {
-        this.$vuetify.theme.dark = true;
+        this.$vuetify.theme.dark = false;
         let user = this.$store.getters.getUsuario;
         if (user) {
             this.usuario = user;

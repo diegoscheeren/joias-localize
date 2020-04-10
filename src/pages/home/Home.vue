@@ -8,8 +8,8 @@
                             <v-card>
                                 <v-card-text align="center" justify="center">
                                     <v-row>
-                                        <v-col cols="12">
-                                            <span>Utilize o <b>menu</b> no canto superior esquedo para acessar as funcionalidades!</span>
+                                        <v-col cols="12" md="6">
+                                            <span>Tela inicial!</span>
                                         </v-col>
                                     </v-row>
                                 </v-card-text>

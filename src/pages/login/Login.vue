@@ -6,7 +6,7 @@
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="elevation-12 ">
                             <v-toolbar dark flat>
-                                <v-toolbar-title>Controle de Veiculosss/v-toolbar-title>
+                                <v-toolbar-title>WildLife Semi-Joias</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text>
                                 <v-form>
@@ -40,8 +40,8 @@ import BaseContainer from '@/components/BaseContainer'
 export default {
     name: 'Login',
     data: () => ({
-        email: 'questor@example_email.com',
-        password: 'questor123',
+        email: 'dscheeren23@gmail.com',
+        password: '12345678',
         snackbar: false,
     }),
     components: {
