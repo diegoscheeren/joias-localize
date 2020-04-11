@@ -1,6 +1,11 @@
 <template>
     <v-app id="menuLateral">
-        <Menu :usuario="this.usuario"/>
+        <Menu
+            :usuario="this.usuario"
+            :actionBtn="this.actionBtn || {show: false, to: ''}"
+            :pageTitle="this.pageTitle || ''"
+            :backBtn="this.backBtn || {show: false, to: ''}"
+        />
         <span>
             <slot name="principal" />
         </span>
@@ -14,7 +19,7 @@ export default {
     name: 'BaseContainer',
     data() {
         return {
-            usuario: false
+            usuario: false,
         }
     },
     created() {
@@ -26,6 +31,7 @@ export default {
             (this.$route.path != '/login') && this.$router.push('/login');
         }
     },
+    props: ['pageTitle', 'actionBtn', 'backBtn'],
     components: {
         Menu
     }

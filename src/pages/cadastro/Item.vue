@@ -1,5 +1,5 @@
-<template>
-    <BaseContainer>
+<template ref="item">
+    <BaseContainer :actionBtn="this.actionBtn" :pageTitle="this.pageTitle" :backBtn="this.backBtn">
         <span slot="principal">
             <v-content>
                 <v-container fluid>
@@ -7,12 +7,6 @@
                         <v-col cols="11">
                             <v-card>
                                 <v-card-text align="center" justify="center">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <label v-if="this.isEdit">Edição de Item</label>
-                                            <label v-if="!this.isEdit">Cadastro de Item</label>
-                                        </v-col>
-                                    </v-row>
                                     <div>
                                         <input v-model="id" type="hidden">
                                         <v-text-field label="Código" v-model="codigo"></v-text-field>
@@ -30,8 +24,8 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer />
-                                    <v-btn text link to="/itens">Cancelar</v-btn>
-                                    <v-btn text color="primary" @click="salvar">Salvar</v-btn>
+                                    <!-- <v-btn text link to="/itens">Cancelar</v-btn>
+                                    <v-btn text color="primary" @click="salvar">Salvar</v-btn> -->
                                 </v-card-actions>
                             </v-card>
                         </v-col>
@@ -55,13 +49,14 @@ export default {
         valor: '',
         estoque: '',
         isEdit: null,
+        pageTitle: '',
+        actionBtn: {show: true, text: 'Salvar'},
+        backBtn: {show: true, to: '/itens'},
     }),
     created() {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
-
-        // eslint-disable-next-line no-console
-        console.log(this.isEdit);
+        this.pageTitle = this.isEdit ? 'Edição de Item' : 'Cadastro de Item'
 
         if (this.isEdit) {
             this.id = dados.id;
@@ -73,6 +68,8 @@ export default {
 
             this.$store.commit('setData', {});
         }
+
+        this.$root.$refs.item = this.salvar();
     },
     components: {
         BaseContainer,

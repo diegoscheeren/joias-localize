@@ -6,7 +6,7 @@
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="elevation-12 ">
                             <v-toolbar dark flat>
-                                <v-toolbar-title>WildLife Semi-Joias</v-toolbar-title>
+                                <v-toolbar-title>Localize Semi-Joias</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text>
                                 <v-form>

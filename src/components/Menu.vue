@@ -102,7 +102,7 @@
 
                 <v-divider dark class="my-4"/>
 
-                <v-list-item link to="" >
+                <v-list-item link @click="logout">
                     <v-list-item-action>
                         <v-icon color="red">mdi-logout</v-icon>
                     </v-list-item-action>
@@ -115,12 +115,19 @@
         </v-navigation-drawer>
 
         <v-app-bar app>
-            <v-app-bar-nav-icon v-if="usuario" @click.stop="primaryDrawer.model = !primaryDrawer.model"/>
-            <v-toolbar-title>
-                <span>Olá {{usuario.name}}, bem vindo!</span>
-            </v-toolbar-title>
+            <v-app-bar-nav-icon v-if="usuario && !backBtn.show" @click.stop="primaryDrawer.model = !primaryDrawer.model"/>
+            <v-btn icon v-if="usuario && backBtn.show" link :to="backBtn.to">
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
             <v-spacer />
-            <v-btn @click="logout" color="error">Sair</v-btn>
+            <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
+            <v-spacer />
+            <v-btn v-if="actionBtn.show && actionBtn.to" text color="pink" link :to="actionBtn.to" icon>
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+            <v-btn v-if="actionBtn.show && !actionBtn.to" @click="salvar" text color="pink" icon>
+                <v-icon>mdi-content-save-outline</v-icon>
+            </v-btn>
         </v-app-bar>
     </span>
 </template>
@@ -133,13 +140,21 @@ export default {
             model: null,
         },
     }),
-    props: ['usuario'],
+    props: ['usuario', 'pageTitle', 'actionBtn', 'backBtn'],
     methods: {
         logout() {
             this.$store.commit('setUsuario', null);
             sessionStorage.clear();
             this.$router.push('/login');
+        },
+        salvar() {
+            this.$root.$refs.item.salvar();
         }
-    }
+    },
+    created () {
+        // eslint-disable-next-line no-console
+        console.log(this.backBtn);
+    },
+
 };
 </script>
