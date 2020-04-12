@@ -2,15 +2,13 @@
     <BaseContainer :actionBtn="this.actionBtn" :pageTitle="this.pageTitle">
         <span slot="principal">
             <v-content>
-
-                <v-data-table fixed-header :headers="headers" :items="dados" sort-by="codigo" class="elevation-0"
-                    :mobileBreakpoint="0" :loading="loading" height="350px">
+                <v-data-table fixed-header :headers="headers" :items="dados" class="elevation-0"
+                    :mobileBreakpoint="0" :loading="loading" height="430px" @click:row="editar"
+                    >
                     <template v-slot:item.action="{ item }">
-                        <v-icon small class="mr-2" @click="editar(item)">mdi-pencil</v-icon>
-                        <v-icon small @click="excluir(item.id)">mdi-delete</v-icon>
+                        <v-icon small color="red" @click.stop="excluir(item.id)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-
             </v-content>
         </span>
     </BaseContainer>
@@ -25,15 +23,12 @@ export default {
         loading: true,
         dados: [],
         dialog: false,
-        pageTitle: 'Itens',
-        actionBtn: {show: true, to: '/cadastro-item', text: 'Novo'},
+        pageTitle: 'Peças',
+        actionBtn: {show: true, to: '/cadastro-item'},
         headers: [
-            { text: 'Códgio', align: 'start', sortable: false, value: 'codigo' },
-            { text: 'Descrição', value: 'descricao' },
-            { text: 'Valor', value: 'valor' },
-            { text: 'Custo', value: 'custo' },
-            { text: 'Estoque', value: 'estoque' },
-            { text: 'Ações', value: 'action', sortable: false },
+            {text: 'Descrição', value: 'descricao', align: 'start', width: '180px'}, // start center end
+            {text: 'Valor', value: 'valor_venda' },
+            {text: 'Excluir', value: 'action', sortable: false, align: 'center' },
         ],
     }),
     mounted () {

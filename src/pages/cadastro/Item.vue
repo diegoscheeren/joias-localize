@@ -4,30 +4,48 @@
             <v-content>
                 <v-container fluid>
                     <v-row align="center" justify="center">
-                        <v-col cols="11">
-                            <v-card>
-                                <v-card-text align="center" justify="center">
-                                    <div>
-                                        <input v-model="id" type="hidden">
-                                        <v-text-field label="Código" v-model="codigo"></v-text-field>
-                                        <v-text-field label="Descrição" v-model="descricao"></v-text-field>
-                                        <v-text-field label="Custo" v-model="custo"></v-text-field>
-                                        <!-- <v-text-field label="Valor" v-model="valor"></v-text-field> -->
-                                        <v-text-field label="Estoque" v-model="estoque"></v-text-field>
-                                        <v-text-field label="Valor (R$)"  v-model="valor"
-                                            placeholder="0.00"
-                                            ref="price"
-                                            type="tel"
-                                            v-mask="['#.##','##.##','###.##','####.##','#####.##']">
-                                        </v-text-field>
-                                    </div>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer />
-                                    <!-- <v-btn text link to="/itens">Cancelar</v-btn>
-                                    <v-btn text color="primary" @click="salvar">Salvar</v-btn> -->
-                                </v-card-actions>
-                            </v-card>
+                        <v-col cols="12">
+                            <input v-model="id" type="hidden">
+                            <v-text-field label="Descrição" v-model="descricao"/>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field label="Valor Custo (R$)" v-model="valor_custo"
+                                placeholder="0.00"
+                                v-mask="['#.##','##.##','###.##','####.##','#####.##']">
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field label="Valor Venda (R$)" v-model="valor_venda"
+                                placeholder="0.00"
+                                v-mask="['#.##','##.##','###.##','####.##','#####.##']">
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field label="Estoque" v-model="estoque"/>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-select :items="this.categorias" label="Categoria" v-model="categoria"/>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-select
+                                :items="[{text: 'Ouro', value: 'ouro'}, {text: 'Prata', value: 'prata'}]"
+                                label="Banho" v-model="banho"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-select
+                                :items="[{text: 'Feminino', value: 'f'}, {text: 'Masculino', value: 'm'}]"
+                                label="Gênero" v-model="genero"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-file-input label="Imagem" v-model="imagem" prepend-icon="mdi-camera"/>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-img
+                                :src="`https://cdn-cv.r4you.co/wp-content/uploads/2018/10/iStock-536613027.jpg`"
+                                height="75" width="150"
+                            />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -43,11 +61,24 @@ export default {
     name: 'Item',
     data: () => ({
         id: '',
-        codigo: '',
         descricao: '',
-        custo: '',
-        valor: '',
+        valor_custo: '',
+        valor_venda: '',
         estoque: '',
+        categoria: '',
+        genero: 'f',
+        banho: '',
+        imagem: '',
+        categorias: [
+            {value: 'aneis', text: 'Anéis'},
+            {value: 'brincos', text: 'Brincos'},
+            {value: 'gargantilhas', text: 'Gargantilhas'},
+            {value: 'pulseiras', text: 'Pulseira'},
+            {value: 'tornozeleiras', text: 'Tornozeleiras'},
+            {value: 'conjuntos', text: 'Conjuntos'},
+            {value: 'pingentes', text: 'Pingentes'},
+            {value: 'embalagens', text: 'Embalagens'},
+        ],
         isEdit: null,
         pageTitle: '',
         actionBtn: {show: true, text: 'Salvar'},
@@ -56,41 +87,52 @@ export default {
     created() {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
-        this.pageTitle = this.isEdit ? 'Edição de Item' : 'Cadastro de Item'
+        this.pageTitle = this.isEdit ? 'Editar Peça' : 'Cadastrar Peça'
 
         if (this.isEdit) {
             this.id = dados.id;
-            this.codigo = dados.codigo;
             this.descricao = dados.descricao;
-            this.custo = dados.custo;
-            this.valor = dados.valor;
+            this.valor_custo = dados.valor_custo;
+            this.valor_venda = dados.valor_venda;
             this.estoque = dados.estoque;
+            this.categoria = dados.categoria;
+            this.banho = dados.banho;
+            this.genero = dados.genero;
+            this.imagem = dados.imagem;
 
             this.$store.commit('setData', {});
         }
 
-        this.$root.$refs.item = this.salvar();
+        this.$root.$refs.component = {salvar: this.salvar};
     },
     components: {
         BaseContainer,
     },
     methods: {
         salvar() {
-            this.$http.post(this.$urlAPI + 'item', {
+            const d = {
                 id: this.id,
-                codigo: this.codigo,
                 descricao: this.descricao,
-                custo: this.custo,
-                valor: this.valor,
-                estoque: this.estoque
-            })
-            .then(resp => {
-                if (resp.data.status) {
-                    this.$router.push('/itens');
-                }
-                // eslint-disable-next-line no-console
-                console.log(resp);
-            });
+                valor_custo: this.valor_custo,
+                valor_venda: this.valor_venda,
+                estoque: this.estoque,
+                categoria: this.categoria,
+                genero: this.genero,
+                banho: this.banho,
+                imagem: this.imagem
+            };
+
+            !this.id
+                ? this.$http.post(this.$urlAPI + 'item', d).then(resp => {
+                    if (resp.data.status) {
+                        this.$router.push('/itens');
+                    }
+                })
+                : this.$http.put(this.$urlAPI + 'item', d).then(resp => {
+                    if (resp.data.status) {
+                        this.$router.push('/itens');
+                    }
+                })
         }
     }
 }

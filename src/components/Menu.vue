@@ -122,10 +122,10 @@
             <v-spacer />
             <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
             <v-spacer />
-            <v-btn v-if="actionBtn.show && actionBtn.to" text color="pink" link :to="actionBtn.to" icon>
+            <v-btn v-if="actionBtn.show && actionBtn.to" text color="blue" link :to="actionBtn.to" icon>
                 <v-icon>mdi-plus</v-icon>
             </v-btn>
-            <v-btn v-if="actionBtn.show && !actionBtn.to" @click="salvar" text color="pink" icon>
+            <v-btn v-if="actionBtn.show && !actionBtn.to" @click="salvar" text color="blue" icon>
                 <v-icon>mdi-content-save-outline</v-icon>
             </v-btn>
         </v-app-bar>
@@ -148,7 +148,7 @@ export default {
             this.$router.push('/login');
         },
         salvar() {
-            this.$root.$refs.item.salvar();
+            this.$root.$refs.component.salvar();
         }
     },
     created () {

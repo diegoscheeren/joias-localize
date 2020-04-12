@@ -1,94 +1,198 @@
-<template>
-    <Wildlife>
+<template ref="item">
+    <BaseContainer :actionBtn="this.actionBtn" :pageTitle="this.pageTitle" :backBtn="this.backBtn">
         <span slot="principal">
             <v-content>
-                <v-container fluid>
-                    <v-row align="center" justify="center">
-                        <v-col cols="11">
-                            <v-card>
-                                <v-card-text align="center" justify="center">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <label v-if="this.isEdit">Edição de Colaborador</label>
-                                            <label v-if="!this.isEdit">Cadastro de Colaborador</label>
-                                        </v-col>
-                                    </v-row>
-                                    <div>
-                                        <input v-model="id" type="hidden">
-                                        <v-text-field label="Código" v-model="codigo"></v-text-field>
-                                        <v-text-field label="Descrição" v-model="descricao"></v-text-field>
-                                        <v-text-field label="Custo" v-model="custo"></v-text-field>
-                                        <v-text-field label="Valor" v-model="valor"></v-text-field>
-                                        <v-text-field label="Estoque" v-model="estoque"></v-text-field>
-                                    </div>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer />
-                                    <v-btn text link to="/itens">Cancelar</v-btn>
-                                    <v-btn text color="primary" @click="salvar">Salvar</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-col>
-                    </v-row>
-                </v-container>
+                <v-tabs v-model="tab" centered dark>
+                    <v-tabs-slider/>
+                    <v-tab href="#tab-1">
+                        <v-icon>mdi-account-box</v-icon>
+                    </v-tab>
+                    <v-tab href="#tab-2">
+                        <v-icon>mdi-phone</v-icon>
+                    </v-tab>
+                    <v-tab href="#tab-3">
+                        <v-icon>mdi-home</v-icon>
+                    </v-tab>
+                </v-tabs>
+                <v-tabs-items v-model="tab">
+                    <v-tab-item key="1" value="tab-1">
+                        <v-container fluid>
+                            <v-row align="center" justify="center">
+                                <input v-model="id" type="hidden">
+                                <v-col cols="12">
+                                    <v-text-field label="E-Mail" v-model="email"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Senha" v-model="senha"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Confirmar Senha" v-model="confirm"/>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field label="Nome Completo" v-model="nome"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="RG" v-model="rg"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="CPF" v-model="cpf"
+                                        v-mask="['###.###.###-##']">
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-tab-item>
+                    <v-tab-item key="2" value="tab-2">
+                        <v-container fluid>
+                            <v-row align="center" justify="center">
+                                <v-col cols="6">
+                                    <v-text-field label="Telefone" v-model="telefone"
+                                        v-mask="['(##) # #### ####']">
+                                    </v-text-field>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Nacionalidade" v-model="nacionalidade"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Data de Nasc." v-model="nascimento"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-select
+                                        :items="this.estados_civis"
+                                        label="Estado Civil" v-model="estado_civil"
+                                    />
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field label="Profissão" v-model="profissao"/>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-tab-item>
+                    <v-tab-item key="3" value="tab-3">
+                        <v-container fluid>
+                            <v-row align="center" justify="center">
+                                 <v-col cols="6">
+                                    <v-text-field label="CEP" v-model="cep" v-mask="['#####-###']"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-select
+                                        :items="this.ufs"
+                                        label="UF" v-model="uf"
+                                    />
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Município" v-model="municipio"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Número" v-model="numero"/>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field label="Bairro" v-model="bairro"/>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field label="Endereço" v-model="endereco"/>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-tab-item>
+                </v-tabs-items>
             </v-content>
         </span>
-    </Wildlife>
+    </BaseContainer>
 </template>
 
 <script>
-import Wildlife from '@/components/Wildlife'
+import BaseContainer from '@/components/BaseContainer'
+import utils from '../../plugins/utils';
 
 export default {
     name: 'Item',
     data: () => ({
         id: '',
-        codigo: '',
-        descricao: '',
-        custo: '',
-        valor: '',
-        estoque: '',
-        isEdit: null
+        email: '',
+        senha: '',
+        confirm: '',
+        nome: '',
+        rg: '',
+        cpf: '',
+        telefone: '',
+        nacionalidade: 'Brasileiro(a)',
+        nascimento: '',
+        estado_civil: '',
+        profissao: '',
+        uf: '',
+        cep: '',
+        municipio: '',
+        numero: '',
+        bairro: '',
+        endereco: '',
+        ufs: [],
+        estados_civis: [
+            {text: 'Solteiro(a)', value: 's'},
+            {text: 'União Estável', value: 'u'},
+            {text: 'Casado(a)', value: 'c'},
+            {text: 'Divorciado(a)', value: 'd'},
+            {text: 'Viúvo(a)', value: 'v'},
+        ],
+        isEdit: null,
+        tab: null,
+        pageTitle: '',
+        actionBtn: {show: true, text: 'Salvar'},
+        backBtn: {show: true, to: '/colaboradores'},
     }),
     created() {
-        let dados = this.$store.getters.getData,
-            isEdit = !!Object.keys(dados).length;
+        let dados = this.$store.getters.getData;
+        this.isEdit = Object.keys(dados).length;
+        this.pageTitle = this.isEdit ? 'Editar Colaborador(a)' : 'Cadastrar Colaborador(a)'
 
-        // eslint-disable-next-line no-console
-        console.log(isEdit);
-
-
-        if (isEdit) {
+        if (this.isEdit) {
             this.id = dados.id;
-            this.codigo = dados.codigo;
-            this.descricao = dados.descricao;
-            this.custo = dados.custo;
-            this.valor = dados.valor;
-            this.estoque = dados.estoque;
+            this.nome = dados.nome;
+            this.rg = dados.rg;
+            this.cpf = dados.cpf;
+            this.telefone = dados.telefone;
+            this.endereco = dados.endereco;
+            this.nacionalidade = dados.nacionalidade;
+            this.nascimento = dados.nascimento;
+            this.estado_civil = dados.estado_civil;
+            this.profissao = dados.profissao;
 
             this.$store.commit('setData', {});
         }
+
+        utils.ufs.forEach(uf => this.ufs.push({text: uf.nome, value: uf.sigla}));
+
+        this.$root.$refs.component = {salvar: this.salvar};
     },
     components: {
-        Wildlife,
+        BaseContainer,
     },
     methods: {
         salvar() {
-            this.$http.post(this.$urlAPI + 'item', {
+            const d = {
                 id: this.id,
-                codigo: this.codigo,
-                descricao: this.descricao,
-                custo: this.custo,
-                valor: this.valor,
-                estoque: this.estoque
-            })
-            .then(resp => {
-                if (resp.data.status) {
-                    this.$router.push('/itens');
-                }
-                // eslint-disable-next-line no-console
-                console.log(resp);
-            });
+                nome: this.nome,
+                rg: this.rg,
+                cpf: this.cpf,
+                telefone: this.telefone,
+                endereco: this.endereco,
+                nacionalidade: this.nacionalidade,
+                nascimento: this.nascimento,
+                estado_civil: this.estado_civil,
+                profissao: this.profissao,
+            };
+
+            !this.id
+                ? this.$http.post(this.$urlAPI + 'item', d).then(resp => {
+                    if (resp.data.status) {
+                        this.$router.push('/itens');
+                    }
+                })
+                : this.$http.put(this.$urlAPI + 'item', d).then(resp => {
+                    if (resp.data.status) {
+                        this.$router.push('/itens');
+                    }
+                })
         }
     }
 }
