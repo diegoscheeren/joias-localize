@@ -39,13 +39,10 @@
                             />
                         </v-col>
                         <v-col cols="6">
-                            <v-file-input label="Imagem" v-model="imagem" prepend-icon="mdi-camera"/>
+                            <v-file-input accept="image/*" @change="setImagem" label="Imagem" prepend-icon="mdi-camera"/>
                         </v-col>
                         <v-col cols="6">
-                            <v-img
-                                :src="`https://cdn-cv.r4you.co/wp-content/uploads/2018/10/iStock-536613027.jpg`"
-                                height="75" width="150"
-                            />
+                            <v-img :src="this.urlImagePreview" height="75" width="150"/>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -69,6 +66,7 @@ export default {
         genero: 'f',
         banho: '',
         imagem: '',
+        urlImagePreview: '',
         categorias: [
             {value: 'aneis', text: 'Anéis'},
             {value: 'brincos', text: 'Brincos'},
@@ -133,6 +131,18 @@ export default {
                         this.$router.push('/itens');
                     }
                 })
+        },
+        setImagem(e) {
+            if (!e) {
+                this.urlImagePreview = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = read => {
+                this.imagem = read.target.result;
+                this.urlImagePreview = URL.createObjectURL(e);
+            }
+            reader.readAsDataURL(e);
         }
     }
 }

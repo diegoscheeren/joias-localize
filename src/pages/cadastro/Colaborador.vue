@@ -84,13 +84,16 @@
                                     <v-text-field label="Município" v-model="municipio"/>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="Número" v-model="numero"/>
-                                </v-col>
-                                <v-col cols="12">
                                     <v-text-field label="Bairro" v-model="bairro"/>
                                 </v-col>
                                 <v-col cols="12">
                                     <v-text-field label="Endereço" v-model="endereco"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Número" v-model="numero"/>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field label="Complemento" v-model="complemento"/>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -126,6 +129,7 @@ export default {
         numero: '',
         bairro: '',
         endereco: '',
+        complemento: '',
         ufs: [],
         estados_civis: [
             {text: 'Solteiro(a)', value: 's'},
@@ -147,15 +151,24 @@ export default {
 
         if (this.isEdit) {
             this.id = dados.id;
+            this.email = dados.email;
+            this.senha = dados.senha;
+            this.confirm = dados.confirm;
             this.nome = dados.nome;
             this.rg = dados.rg;
             this.cpf = dados.cpf;
             this.telefone = dados.telefone;
-            this.endereco = dados.endereco;
             this.nacionalidade = dados.nacionalidade;
             this.nascimento = dados.nascimento;
             this.estado_civil = dados.estado_civil;
             this.profissao = dados.profissao;
+            this.cep = dados.cep;
+            this.uf = dados.uf;
+            this.municipio = dados.municipio;
+            this.numero = dados.numero;
+            this.bairro = dados.bairro;
+            this.endereco = dados.endereco;
+            this.complemento = dados.complemento;
 
             this.$store.commit('setData', {});
         }
@@ -171,15 +184,24 @@ export default {
         salvar() {
             const d = {
                 id: this.id,
+                email: this.email,
+                senha: this.senha,
+                confirm: this.confirm,
                 nome: this.nome,
                 rg: this.rg,
                 cpf: this.cpf,
                 telefone: this.telefone,
-                endereco: this.endereco,
                 nacionalidade: this.nacionalidade,
                 nascimento: this.nascimento,
                 estado_civil: this.estado_civil,
                 profissao: this.profissao,
+                cep: this.cep,
+                uf: this.uf,
+                municipio: this.municipio,
+                bairro: this.bairro,
+                endereco: this.endereco,
+                numero: this.numero,
+                complemento: this.complemento,
             };
 
             !this.id

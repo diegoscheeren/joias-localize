@@ -148,13 +148,8 @@ export default {
             this.$router.push('/login');
         },
         salvar() {
-            this.$root.$refs.component.salvar();
+            this.$root.$refs.component.salvar && this.$root.$refs.component.salvar();
         }
     },
-    created () {
-        // eslint-disable-next-line no-console
-        console.log(this.backBtn);
-    },
-
 };
 </script>
