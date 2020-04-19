@@ -8,9 +8,9 @@ import vuetify from './plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import VueTheMask from 'vue-the-mask'
 
-axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*';
+// axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+// axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+// axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*';
 
 Vue.config.productionTip = false
 
@@ -20,6 +20,7 @@ Vue.use(vuetify, {
     iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 });
 
+Vue.prototype.$serverUrl = `http://${window.location.hostname}:8000/`;
 Vue.prototype.$http = axios
 Vue.prototype.$urlAPI = ((window.location.hostname == 'localhost')
     ? `http://${window.location.hostname}:8000/api/`

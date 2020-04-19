@@ -9,11 +9,13 @@
         <span>
             <slot name="principal" />
         </span>
+        <Snackbar/>
     </v-app>
 </template>
 
 <script>
 import Menu from '@/components/Menu';
+import Snackbar from '@/components/Snackbar';
 
 export default {
     name: 'BaseContainer',
@@ -30,10 +32,19 @@ export default {
         } else {
             (this.$route.path != '/login') && this.$router.push('/login');
         }
+
+        // NOTIFICAÇÕES
+        this.$http.interceptors.response.use(resp => {
+            resp.data && resp.data.msg &&
+                this.$store.commit('setSnackbar', {msg: resp.data.msg, status: resp.data.status});
+            return resp
+
+        }, () => {}); // https://github.com/axios/axios/issues/266
     },
     props: ['pageTitle', 'actionBtn', 'backBtn'],
     components: {
-        Menu
+        Menu,
+        Snackbar
     }
 };
 </script>

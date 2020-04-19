@@ -50,7 +50,7 @@ export default {
         excluir(id) {
             this.$http.delete(this.$urlAPI + 'item', {data: {id}})
                 .then(() => this.consultar());
-        }
+        },
     },
     components: {
         BaseContainer

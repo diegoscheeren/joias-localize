@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         usuario: sessionStorage.getItem('usuario') ? JSON.parse(sessionStorage.getItem('usuario')) : null,
-        data: {}
+        data: {},
+        snackbar: ''
     },
     getters: {
         isAdmin: state => {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
         },
         getData: state => {
             return state.data;
+        },
+        getSnackbar: state => {
+            return state.snackbar;
         }
     },
     mutations: {
@@ -28,6 +32,9 @@ export default new Vuex.Store({
         },
         setData(state, data) {
             state.data = data;
+        },
+        setSnackbar(state, snack) {
+            state.snackbar = snack;
         }
     },
     actions: {
