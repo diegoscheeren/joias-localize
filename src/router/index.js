@@ -6,6 +6,10 @@ import CadastroItem from '@/pages/cadastro/Item'
 import Item from '@/pages/pesquisa/Item'
 import CadastroColaborador from '@/pages/cadastro/Colaborador'
 import Colaborador from '@/pages/pesquisa/Colaborador'
+import CadastroCliente from '@/pages/cadastro/Cliente'
+import Cliente from '@/pages/pesquisa/Cliente'
+import CadastroMostruario from '@/pages/cadastro/Mostruario'
+import Mostruario from '@/pages/pesquisa/Mostruario'
 
 Vue.use(VueRouter)
 
@@ -42,6 +46,26 @@ export default new VueRouter({
             path: '/colaboradores',
             name: 'Colaborador',
             component: Colaborador
+        },
+        {
+            path: '/cadastro-cliente',
+            name: 'CadastroCliente',
+            component: CadastroCliente
+        },
+        {
+            path: '/clientes',
+            name: 'Cliente',
+            component: Cliente
+        },
+        {
+            path: '/cadastro-mostruario',
+            name: 'CadastroMostruario',
+            component: CadastroMostruario
+        },
+        {
+            path: '/mostruarios',
+            name: 'Mostruario',
+            component: Mostruario
         },
         {
             path: '*',

@@ -86,7 +86,13 @@
                                                 v-on="on"
                                             ></v-text-field>
                                         </template>
-                                        <v-date-picker v-model="nascimento" ref="nascimento" no-title @input="menu = false"/>
+                                        <v-date-picker
+                                            v-model="nascimento"
+                                            ref="nascimento"
+                                            no-title
+                                            @input="menu = false"
+                                            locale="pt-br"
+                                        />
                                     </v-menu>
                                 </v-col>
                                 <v-col cols="6">

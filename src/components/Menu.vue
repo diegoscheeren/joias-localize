@@ -64,7 +64,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link to="">
+                <v-list-item link to="/mostruarios">
                     <v-list-item-action>
                         <v-icon>mdi-bag-personal-outline</v-icon>
                     </v-list-item-action>
@@ -91,7 +91,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link to="">
+                <v-list-item link to="/clientes">
                     <v-list-item-action>
                         <v-icon>mdi-account-multiple</v-icon>
                     </v-list-item-action>

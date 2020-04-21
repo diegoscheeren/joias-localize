@@ -10,8 +10,8 @@ export default new Vuex.Store({
         snackbar: ''
     },
     getters: {
-        isAdmin: state => {
-            return state.usuario.is_admin;
+        getUsuarioId: state => {
+            return state.usuario.id;
         },
         getUsuario: state => {
             return state.usuario;

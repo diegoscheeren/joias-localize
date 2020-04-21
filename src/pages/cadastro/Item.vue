@@ -1,4 +1,4 @@
-<template ref="item">
+<template>
     <BaseContainer :actionBtn="this.actionBtn" :pageTitle="this.pageTitle" :backBtn="this.backBtn">
         <span slot="principal">
             <v-content>

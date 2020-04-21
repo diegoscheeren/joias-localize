@@ -23,10 +23,10 @@ export default {
         loading: true,
         dados: [],
         dialog: false,
-        pageTitle: 'Colaboradores',
-        actionBtn: {show: true, to: '/cadastro-colaborador'},
+        pageTitle: 'Clientes',
+        actionBtn: {show: true, to: '/cadastro-cliente'},
         headers: [
-            {text: 'Nome', value: 'name', align: 'start'}, // start center end
+            {text: 'Nome', value: 'nome', align: 'start'}, // start center end
             {text: 'Município', value: 'municipio',  width: '120px'},
             {text: 'Excluir', value: 'action', sortable: false, align: 'center', width: '10px'},
         ],
@@ -37,7 +37,7 @@ export default {
     methods: {
         consultar() {
             this.loading = true;
-            this.$http.get(this.$urlAPI + 'colaborador')
+            this.$http.get(this.$urlAPI + 'cliente')
                 .then(resp => {
                     this.loading = false;
                     this.dados = resp.data.data;
@@ -45,10 +45,10 @@ export default {
         },
         editar(row) {
             this.$store.commit('setData', row);
-            this.$router.push('/cadastro-colaborador');
+            this.$router.push('/cadastro-cliente');
         },
         excluir(id) {
-            this.$http.delete(this.$urlAPI + 'colaborador', {data: {id}})
+            this.$http.delete(this.$urlAPI + 'cliente', {data: {id}})
                 .then(() => this.consultar());
         }
     },
