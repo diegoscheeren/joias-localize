@@ -26,9 +26,9 @@ export default {
         pageTitle: 'Colaboradores',
         actionBtn: {show: true, to: '/cadastro-colaborador'},
         headers: [
-            {text: 'Nome', value: 'nome', align: 'start', width: '180px'}, // start center end
-            {text: 'Telefone', value: 'telefone'},
-            {text: 'Excluir', value: 'action', sortable: false, align: 'center' },
+            {text: 'Nome', value: 'name', align: 'start'}, // start center end
+            {text: 'Município', value: 'municipio',  width: '120px'},
+            {text: 'Excluir', value: 'action', sortable: false, align: 'center', width: '10px'},
         ],
     }),
     mounted () {

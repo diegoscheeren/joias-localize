@@ -20,22 +20,37 @@
                             <v-row align="center" justify="center">
                                 <input v-model="id" type="hidden">
                                 <v-col cols="12">
-                                    <v-text-field label="E-Mail" v-model="email"/>
+                                    <v-text-field ref="email" label="E-mail" v-model="email" :rules="[rules.required, rules.email]"/>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="Senha" v-model="senha"/>
+                                    <v-text-field
+                                        label="Senha"
+                                        v-model="password"
+                                        :rules="[rules.required]"
+                                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="showPassword ? 'text' : 'password'"
+                                        @click:append="showPassword = !showPassword"
+                                    />
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="Confirmar Senha" v-model="confirm"/>
+                                    <v-text-field
+                                        label="Confirmar Senha"
+                                        v-model="password_confirmation"
+                                        ref="password_confirmation"
+                                        :rules="[rules.required]"
+                                        :append-icon="showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="showConfirm ? 'text' : 'password'"
+                                        @click:append="showConfirm = !showConfirm"
+                                    />
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-text-field label="Nome Completo" v-model="nome"/>
+                                    <v-text-field label="Nome Completo" ref="nome" v-model="name"/>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="RG" v-model="rg"/>
+                                    <v-text-field label="RG" ref="rg" v-model="rg"/>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="CPF" v-model="cpf"
+                                    <v-text-field label="CPF" v-model="cpf" ref="cpf"
                                         v-mask="['###.###.###-##']">
                                     </v-text-field>
                                 </v-col>
@@ -46,24 +61,44 @@
                         <v-container fluid>
                             <v-row align="center" justify="center">
                                 <v-col cols="6">
-                                    <v-text-field label="Telefone" v-model="telefone"
+                                    <v-text-field label="Telefone" v-model="telefone" ref="telefone"
                                         v-mask="['(##) # #### ####']">
                                     </v-text-field>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="Nacionalidade" v-model="nacionalidade"/>
+                                    <v-text-field label="Nacionalidade" v-model="nacionalidade" ref="nacionalidade"/>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field label="Data de Nasc." v-model="nascimento"/>
+                                    <v-menu
+                                        v-model="menu"
+                                        :close-on-content-click="false"
+                                        transition="scale-transition"
+                                        offset-y
+                                        max-width="290px"
+                                        min-width="290px"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <v-text-field
+                                                v-model="computedDateFormatted"
+                                                label="Data de Nascimento"
+                                                persistent-hint
+                                                readonly
+                                                v-on="on"
+                                            ></v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="nascimento" ref="nascimento" no-title @input="menu = false"/>
+                                    </v-menu>
                                 </v-col>
                                 <v-col cols="6">
                                     <v-select
                                         :items="this.estados_civis"
-                                        label="Estado Civil" v-model="estado_civil"
+                                        label="Estado Civil"
+                                        v-model="estado_civil"
+                                        ref="estado_civil"
                                     />
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-text-field label="Profissão" v-model="profissao"/>
+                                    <v-text-field label="Profissão" v-model="profissao" ref="profissao"/>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -110,17 +145,16 @@ import utils from '../../plugins/utils';
 
 export default {
     name: 'Item',
-    data: () => ({
+    data: vm => ({
         id: '',
         email: '',
-        senha: '',
-        confirm: '',
-        nome: '',
+        password: '',
+        password_confirmation: '',
+        name: '',
         rg: '',
         cpf: '',
         telefone: '',
         nacionalidade: 'Brasileiro(a)',
-        nascimento: '',
         estado_civil: '',
         profissao: '',
         uf: '',
@@ -140,10 +174,32 @@ export default {
         ],
         isEdit: null,
         tab: null,
+        showPassword: false,
+        showConfirm: false,
         pageTitle: '',
         actionBtn: {show: true, text: 'Salvar'},
         backBtn: {show: true, to: '/colaboradores'},
+        menu: false,
+        nascimento: new Date().toISOString().substr(0, 10),
+        dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+        rules: {
+            required: value => !!value || 'Obrigatório',
+            email: value => {
+                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                return pattern.test(value) || 'E-mail inválido'
+            },
+        },
     }),
+    computed: {
+        computedDateFormatted () {
+            return this.formatDate(this.nascimento)
+        },
+    },
+    watch: {
+        nascimento () {
+            this.dateFormatted = this.formatDate(this.nascimento)
+        },
+    },
     created() {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
@@ -152,9 +208,7 @@ export default {
         if (this.isEdit) {
             this.id = dados.id;
             this.email = dados.email;
-            this.senha = dados.senha;
-            this.confirm = dados.confirm;
-            this.nome = dados.nome;
+            this.name = dados.name;
             this.rg = dados.rg;
             this.cpf = dados.cpf;
             this.telefone = dados.telefone;
@@ -182,12 +236,15 @@ export default {
     },
     methods: {
         salvar() {
+            if (!this.validate()) {
+                return;
+            }
             const d = {
                 id: this.id,
                 email: this.email,
-                senha: this.senha,
-                confirm: this.confirm,
-                nome: this.nome,
+                password: this.password,
+                password_confirmation: this.password_confirmation,
+                name: this.name,
                 rg: this.rg,
                 cpf: this.cpf,
                 telefone: this.telefone,
@@ -204,17 +261,67 @@ export default {
                 complemento: this.complemento,
             };
 
-            !this.id
-                ? this.$http.post(this.$urlAPI + 'item', d).then(resp => {
-                    if (resp.data.status) {
-                        this.$router.push('/itens');
-                    }
-                })
-                : this.$http.put(this.$urlAPI + 'item', d).then(resp => {
-                    if (resp.data.status) {
-                        this.$router.push('/itens');
-                    }
-                })
+            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cadastro', d).then(resp => {
+                resp.data.status && this.$router.push('/colaboradores');
+            });
+        },
+        formatDate (nascimento) {
+            if (!nascimento) return null
+
+            const [year, month, day] = nascimento.split('-')
+            return `${day}/${month}/${year}`
+        },
+        parseDate (nascimento) {
+            if (!nascimento) return null
+
+            const [month, day, year] = nascimento.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
+        validate() {
+            const email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            if (!email.test(this.email)) {
+                this.$store.commit('setSnackbar', {msg: 'E-mail iválido', status: false});
+                this.$nextTick(() => this.$refs.email.focus())
+                return false;
+            }
+
+            if (this.password !== this.password_confirmation) {
+                this.$store.commit('setSnackbar', {msg: 'Senhas não conferem', status: false});
+                this.$nextTick(() => this.$refs.password_confirmation.focus())
+                return false;
+            }
+
+            const fields = [
+                {field: this.name, ref: 'nome', tab: '1', label: 'o Nome'},
+                {field: this.rg, ref: 'rg', tab: '1', label: 'o RG'},
+                {field: this.cpf, ref: 'cpf', tab: '1', label: 'o CPF'},
+                {field: this.telefone, ref: 'telefone', tab: '2', label: 'o Telefone'},
+                {field: this.nacionalidade, ref: 'nacionalidade', tab: '2', label: 'a Nacionalidade'},
+                {field: this.nascimento, ref: 'nascimento', tab: '2', label: 'o Nascimento'},
+                {field: this.estado_civil, ref: 'estado_civil', tab: '2', label: 'o Estado Civil'},
+                {field: this.profissao, ref: 'profissao', tab: '2', label: 'a Profissão'},
+            ];
+
+            let valid = fields.every(f => {
+                if (!f.field) {
+                    this.tab = `tab-${f.tab}`;
+                    this.$store.commit('setSnackbar', {msg: `Informe ${f.label}`, status: false});
+                    this.$nextTick(() => this.$refs[f.ref].focus());
+                    return false;
+                }
+                return true;
+            });
+
+            if (!valid) {
+                return false;
+            }
+
+            if (!this.cep || !this.uf || !this.municipio || !this.bairro || !this.endereco) {
+                this.tab = 'tab-3';
+                this.$store.commit('setSnackbar', {msg: 'Informe os dados de endereço', status: false});
+                return false;
+            }
+            return true;
         }
     }
 }

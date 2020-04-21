@@ -96,7 +96,7 @@ export default {
             this.categoria = dados.categoria;
             this.banho = dados.banho;
             this.genero = dados.genero;
-            this.urlImagePreview = this.$serverUrl + dados.imagem;
+            this.urlImagePreview = dados.imagem ? (this.$serverUrl + dados.imagem) : '';
 
             this.$store.commit('setData', {});
         }
@@ -121,13 +121,8 @@ export default {
             };
 
             this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'item', d).then(resp => {
-                if (resp.data.status) {
-                    // this.$store.commit('setSnackbar', {msg: resp.data.msg, status: resp.data.status});
-                    this.$router.push('/itens');
-                } else {
-                    // this.$store.commit('setSnackbar', {msg: resp.data.msg, status: resp.data.status});
-                }
-            })
+                resp.data.status && this.$router.push('/itens');
+            });
         },
         setImagem(e) {
             if (!e) {

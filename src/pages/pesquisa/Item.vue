@@ -6,10 +6,21 @@
                     :mobileBreakpoint="0" :loading="loading" height="430px" @click:row="editar"
                     >
                     <template v-slot:item.action="{ item }">
-                        <v-icon small color="red" @click.stop="excluir(item.id)">mdi-delete</v-icon>
+                        <v-icon small color="red" @click.stop="confirmarExclusao(item.id)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-content>
+            <v-dialog v-model="dialog" persistent max-width="290">
+                <v-card>
+                    <v-card-title class="headline">Confirmar exclusão</v-card-title>
+                    <v-card-text>Tem certeza que deseja excluir?</v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue" text @click="this.closeDialog">Cancelar</v-btn>
+                        <v-btn color="red" text @click="this.excluir">Excluir</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </span>
     </BaseContainer>
 </template>
@@ -23,12 +34,13 @@ export default {
         loading: true,
         dados: [],
         dialog: false,
+        excluirId: '',
         pageTitle: 'Peças',
         actionBtn: {show: true, to: '/cadastro-item'},
         headers: [
-            {text: 'Descrição', value: 'descricao', align: 'start', width: '180px'}, // start center end
-            {text: 'Valor', value: 'valor_venda' },
-            {text: 'Excluir', value: 'action', sortable: false, align: 'center' },
+            {text: 'Descrição', value: 'descricao', align: 'start'}, // start center end
+            {text: 'Valor', value: 'valor_venda', align: 'center', width: '80px'},
+            {text: 'Excluir', value: 'action', sortable: false, align: 'center', width: '10px' },
         ],
     }),
     mounted () {
@@ -47,10 +59,19 @@ export default {
             this.$store.commit('setData', row);
             this.$router.push('/cadastro-item');
         },
-        excluir(id) {
-            this.$http.delete(this.$urlAPI + 'item', {data: {id}})
-                .then(() => this.consultar());
+        confirmarExclusao(id) {
+            this.excluirId = id;
+            this.dialog = true;
         },
+        excluir() {
+            this.$http.delete(this.$urlAPI + 'item', {data: {id: this.excluirId}})
+                .then(() => this.consultar());
+            this.closeDialog();
+        },
+        closeDialog() {
+            this.excluirId = '';
+            this.dialog = false;
+        }
     },
     components: {
         BaseContainer

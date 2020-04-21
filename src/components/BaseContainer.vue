@@ -37,7 +37,7 @@ export default {
         this.$http.interceptors.response.use(resp => {
             resp.data && resp.data.msg &&
                 this.$store.commit('setSnackbar', {msg: resp.data.msg, status: resp.data.status});
-            return resp
+            return resp;
 
         }, () => {}); // https://github.com/axios/axios/issues/266
     },
