@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         usuario: sessionStorage.getItem('usuario') ? JSON.parse(sessionStorage.getItem('usuario')) : null,
         data: {},
-        snackbar: ''
+        snackbar: '',
     },
     getters: {
         getUsuarioId: state => {
@@ -24,7 +24,7 @@ export default new Vuex.Store({
         },
         getSnackbar: state => {
             return state.snackbar;
-        }
+        },
     },
     mutations: {
         setUsuario(state, n) {
@@ -35,7 +35,7 @@ export default new Vuex.Store({
         },
         setSnackbar(state, snack) {
             state.snackbar = snack;
-        }
+        },
     },
     actions: {
     },

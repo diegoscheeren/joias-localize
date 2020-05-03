@@ -148,6 +148,7 @@
 <script>
 import BaseContainer from '@/components/BaseContainer'
 import utils from '../../plugins/utils';
+import firebase from 'firebase'
 
 export default {
     name: 'Item',
@@ -242,34 +243,43 @@ export default {
     },
     methods: {
         salvar() {
-            if (!this.validate()) {
-                return;
-            }
-            const d = {
-                id: this.id,
-                email: this.email,
-                password: this.password,
-                password_confirmation: this.password_confirmation,
-                name: this.name,
-                rg: this.rg,
-                cpf: this.cpf,
-                telefone: this.telefone,
-                nacionalidade: this.nacionalidade,
-                nascimento: this.nascimento,
-                estado_civil: this.estado_civil,
-                profissao: this.profissao,
-                cep: this.cep,
-                uf: this.uf,
-                municipio: this.municipio,
-                bairro: this.bairro,
-                endereco: this.endereco,
-                numero: this.numero,
-                complemento: this.complemento,
-            };
+            // if (!this.validate()) {
+            //     return;
+            // }
+            // const d = {
+            //     // id: this.id,
+            //     // email: this.email,
+            //     // password: this.password,
+            //     // password_confirmation: this.password_confirmation,
+            //     name: this.name,
+            //     rg: this.rg,
+            //     cpf: this.cpf,
+            //     telefone: this.telefone,
+            //     nacionalidade: this.nacionalidade,
+            //     nascimento: this.nascimento,
+            //     estado_civil: this.estado_civil,
+            //     profissao: this.profissao,
+            //     cep: this.cep,
+            //     uf: this.uf,
+            //     municipio: this.municipio,
+            //     bairro: this.bairro,
+            //     endereco: this.endereco,
+            //     numero: this.numero,
+            //     complemento: this.complemento,
+            // };
 
-            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cadastro', d).then(resp => {
-                resp.data.status && this.$router.push('/colaboradores');
+            firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(user => {
+                user.updateProfile({
+                    displayName: 'aaaa'
+                }).then()
             });
+
+            // !this.id && (d.id = db.collection('itens').doc().id);
+            // db.collection('itens').doc(d.id)[!this.id ? 'set' : 'update'](d).then(() => this.$router.push('/itens'));
+
+            // this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cadastro', d).then(resp => {
+            //     resp.data.status && this.$router.push('/colaboradores');
+            // });
         },
         formatDate (nascimento) {
             if (!nascimento) return null

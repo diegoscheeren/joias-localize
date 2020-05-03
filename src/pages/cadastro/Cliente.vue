@@ -87,6 +87,7 @@
 <script>
 import BaseContainer from '@/components/BaseContainer'
 import utils from '../../plugins/utils';
+import {db} from '../../firebase'
 
 export default {
     name: 'Item',
@@ -172,9 +173,12 @@ export default {
                 complemento: this.complemento,
             };
 
-            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cliente', d).then(resp => {
-                resp.data.status && this.$router.push('/clientes');
-            });
+            !this.id && (d.id = db.collection('clientes').doc().id);
+            db.collection('clientes').doc(d.id)[!this.id ? 'set' : 'update'](d).then(() => this.$router.push('/clientes'));
+
+            // this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cliente', d).then(resp => {
+            //     resp.data.status && this.$router.push('/clientes');
+            // });
         },
         validate() {
             const email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

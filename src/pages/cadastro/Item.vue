@@ -53,6 +53,7 @@
 
 <script>
 import BaseContainer from '@/components/BaseContainer'
+import {db} from '../../firebase'
 
 export default {
     name: 'Item',
@@ -120,9 +121,12 @@ export default {
                 imagem: this.imagem
             };
 
-            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'item', d).then(resp => {
-                resp.data.status && this.$router.push('/itens');
-            });
+            !this.id && (d.id = db.collection('itens').doc().id);
+            db.collection('itens').doc(d.id)[!this.id ? 'set' : 'update'](d).then(() => this.$router.push('/itens'));
+
+            // // this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'item', d).then(resp => {
+            // //     resp.data.status && this.$router.push('/itens');
+            // // });
         },
         setImagem(e) {
             if (!e) {

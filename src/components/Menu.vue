@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
     name: 'Menu',
     data: () => ({
@@ -143,13 +144,18 @@ export default {
     props: ['usuario', 'pageTitle', 'actionBtn', 'backBtn'],
     methods: {
         logout() {
-            this.$store.commit('setUsuario', null);
-            sessionStorage.clear();
-            this.$router.push('/login');
+            firebase.auth().signOut().then(() => this.$router.replace('/login'));
+            // this.$store.commit('setUsuario', null);
+            // sessionStorage.clear();
+            // this.$router.push('/login');
         },
         salvar() {
             this.$root.$refs.component.salvar && this.$root.$refs.component.salvar();
         }
     },
+    created() {
+        //  eslint-disable-next-line no-console
+        // console.log(firebase.auth().currentUser());
+    }
 };
 </script>
