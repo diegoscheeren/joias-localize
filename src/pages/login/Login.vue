@@ -36,42 +36,42 @@
 
 <script>
 import BaseContainer from '@/components/BaseContainer'
-import firebase from 'firebase'
+// import firebase from 'firebase'
 
 export default {
     name: 'Login',
     data: () => ({
-        email: 'diegoluan@zettabrasil.com.br',
-        password: '',
+        email: 'dscheeren23@gmail.com',
+        password: '12345678',
         snackbar: false,
     }),
     components: {
         BaseContainer
     },
     created() {
-        // this.$store.getters.getUsuario && this.$router.push('/');
+        this.$store.getters.getUsuario && this.$router.push('/');
     },
     methods: {
         login() {
-            firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-                .then(() => {
-                    this.$router.push('/')
-                }, () => alert('Erro'));
+            // firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+            //     .then(() => {
+            //         this.$router.push('/')
+            //     }, () => alert('Erro'));
 
-            // this.$http.post(this.$urlAPI + 'login', {
-            //     email: this.email,
-            //     password: this.password
-            // })
-            // .then(response => {
-            //     if (response.data.status) {
-            //         this.$store.commit('setUsuario', response.data.usuario);
-            //         sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
-            //         this.$router.push('/');
-            //     } else if (response.data.status == false) {
-            //         this.snackbar = true;
-            //     }
-            // })
-            // .catch(e => alert(e))
+            this.$http.post(this.$urlAPI + 'login', {
+                email: this.email,
+                password: this.password
+            })
+            .then(response => {
+                if (response.data.status) {
+                    this.$store.commit('setUsuario', response.data.usuario);
+                    sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
+                    this.$router.push('/');
+                } else if (response.data.status == false) {
+                    this.snackbar = true;
+                }
+            })
+            .catch(e => alert(e))
         }
     }
 }

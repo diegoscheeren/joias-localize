@@ -27,10 +27,9 @@
 
 <script>
 import BaseContainer from '@/components/BaseContainer'
-import {db} from '../../firebase'
 
 export default {
-    name: 'Colaborador',
+    name: 'Cliente',
     data: () => ({
         loading: true,
         dados: [],
@@ -49,15 +48,11 @@ export default {
     methods: {
         consultar() {
            this.loading = true;
-            this.dados = [];
-
-            db.collection('clientes').get().then((querySnapshot) => {
-                querySnapshot.docChanges().forEach(snap => {
-                    (snap.type !== 'removed') && this.dados.push(snap.doc.data());
-                });
-
-                this.loading = false;
-            });
+            this.$http.get(this.$urlAPI + 'cliente')
+                .then(resp => {
+                    this.loading = false;
+                    this.dados = resp.data.data;
+                })
         },
         editar(row) {
             this.$store.commit('setData', row);
@@ -68,12 +63,8 @@ export default {
             this.dialog = true;
         },
         excluir() {
-            db.collection('clientes').doc(this.excluirId).delete()
-            .then(() => {
-                this.consultar();
-            });
-            // this.$http.delete(this.$urlAPI + 'item', {data: {id: this.excluirId}})
-            //     .then(() => this.consultar());
+            this.$http.delete(this.$urlAPI + 'cliente', {data: {id: this.excluirId}})
+                .then(() => this.consultar());
             this.closeDialog();
         },
         closeDialog() {

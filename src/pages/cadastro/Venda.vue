@@ -5,7 +5,7 @@
                 <v-tabs v-model="tab" centered dark>
                     <v-tabs-slider/>
                     <v-tab href="#tab-1">
-                        <v-icon>mdi-bag-personal-outline</v-icon>
+                        <v-icon>mdi-account-multiple</v-icon>
                     </v-tab>
                     <v-tab href="#tab-2">
                         <v-icon>mdi-diamond-stone</v-icon>
@@ -18,18 +18,8 @@
                                 <input v-model="id" type="hidden">
                                 <v-col cols="12">
                                     <v-select
-                                        :items="this.colaboradores"
-                                        label="Colaborador(a)" v-model="colaborador"
-                                    />
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-select
-                                        :items="[
-                                            {text: 'Livre', value: 'livre'},
-                                            {text: 'Consignado', value: 'consignado'},
-                                            {text: 'Devolvido', value: 'devolvido'},
-                                        ]"
-                                        label="Status" v-model="status"
+                                        :items="this.clientes"
+                                        label="Cliente" v-model="cliente_id"
                                     />
                                 </v-col>
                                 <v-col cols="12">
@@ -44,15 +34,15 @@
                                         <template v-slot:activator="{ on }">
                                             <v-text-field
                                                 v-model="computedDateFormatted"
-                                                label="Data de Consignação"
+                                                label="Data"
                                                 persistent-hint
                                                 readonly
                                                 v-on="on"
                                             ></v-text-field>
                                         </template>
                                         <v-date-picker
-                                            v-model="data_consignacao"
-                                            ref="data_consignacao"
+                                            v-model="data_venda"
+                                            ref="data_venda"
                                             no-title
                                             @input="menu = false"
                                             locale="pt-br"
@@ -73,8 +63,8 @@
                                     height="360px"
                                     class="elevation-0"
                                 ></v-data-table>
-                                <v-btn class="mx-2" fab dark color="indigo" @click="goToMostruarioItens"
-                                    style="position: absolute;top: 295px; right: 0;">
+                                <v-btn class="mx-2" fab dark color="indigo" @click="goToVendaItens"
+                                    v-show="!this.isEdit" style="position: absolute;top: 295px; right: 0;">
                                     <v-icon dark>mdi-plus</v-icon>
                                 </v-btn>
                             </v-content>
@@ -90,13 +80,13 @@
 import BaseContainer from '@/components/BaseContainer'
 
 export default {
-    name: 'Mostruario',
+    name: 'Venda',
     data: vm => ({
         id: '',
-        colaborador: '',
-        status: '',
-        data_consignacao: '',
-        colaboradores: [],
+        cliente_id: '',
+        data_venda: '',
+        clientes: [],
+        colaborador_id: '',
         isEdit: null,
         clearStore: true,
         tab: 'tab-1',
@@ -108,7 +98,7 @@ export default {
         dados: [],
         pageTitle: '',
         actionBtn: {show: true, text: 'Salvar'},
-        backBtn: {show: true, to: '/mostruarios'},
+        backBtn: {show: true, to: '/vendas'},
         menu: false,
         nascimento: new Date().toISOString().substr(0, 10),
         dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
@@ -118,36 +108,39 @@ export default {
     }),
     computed: {
         computedDateFormatted () {
-            return this.formatDate(this.data_consignacao)
+            return this.formatDate(this.data_venda)
         },
     },
     watch: {
         nascimento () {
-            this.dateFormatted = this.formatDate(this.data_consignacao)
+            this.dateFormatted = this.formatDate(this.data_venda)
         },
     },
     mounted() {
-        this.setColaboradores();
+        this.setClientes();
         let dados = this.$store.getters.getData;
-        let mostruario = dados.mostruario;
+        let venda = dados.venda;
+        this.colaborador_id = this.$store.getters.getUsuarioId;
         this.isEdit = Object.keys(dados).length && dados.edit;
-        this.pageTitle = this.isEdit ? 'Editar Mostruário' : 'Cadastrar Mostruário';
+        this.pageTitle = this.isEdit ? 'Editar venda' : 'Nova venda';
 
-        if (mostruario) {
-            this.dados = dados.mostruario.itens;
-            this.colaborador = dados.mostruario.colaborador;
-            this.status = dados.mostruario.status;
-            this.data_consignacao = dados.mostruario.data_consignacao;
+        if (venda) {
+            this.dados = dados.venda.itens;
+            this.colaborador_id = dados.venda.colaborador_id;
+            this.cliente_id = dados.venda.cliente_id;
+            this.data_venda = dados.venda.data_venda;
 
             this.tab = 'tab-2';
         }
 
         if (this.isEdit) {
+            //  eslint-disable-next-line no-console
+                    console.log(dados.cliente_id);
             this.id = dados.id;
-            this.colaborador = dados.colaborador_id;
-            this.status = dados.status;
-            this.data_consignacao = dados.data_consignacao;
-            !dados.itens && this.setMostruarioItens();
+            this.colaborador_id = dados.colaborador_id;
+            this.cliente_id = dados.cliente_id;
+            this.data_venda = dados.data_venda;
+            !dados.itens && this.setVendaItens();
 
             // this.$store.commit('setData', {});
         }
@@ -167,50 +160,48 @@ export default {
             // }
             const d = {
                 id: this.id,
-                data_consignacao: this.data_consignacao,
-                colaborador_id: this.colaborador,
-                status: this.status,
+                data_venda: this.data_venda,
+                colaborador_id: this.colaborador_id,
+                cliente_id: this.cliente_id,
                 itens: this.dados
             };
 
-            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'mostruario', d).then(resp => {
-                resp.data.status && this.$router.push('/mostruarios');
+            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'venda', d).then(resp => {
+                resp.data.status && this.$router.push('/vendas');
             });
         },
-        goToMostruarioItens() {
+        goToVendaItens() {
             this.$store.commit('setData', {
-                mostruario: {
-                    colaborador: this.colaborador,
-                    status: this.status,
-                    data_consignacao: this.data_consignacao,
+                venda: {
+                    colaborador_id: this.colaborador_id,
+                    cliente_id: this.cliente_id,
+                    data_venda: this.data_venda,
                     itens: this.dados
                 }
             });
             this.clearStore = false;
-            this.$router.push('/mostruario-itens');
+            this.$router.push('/venda-itens');
         },
-        setMostruarioItens() {
-            this.$http.put(this.$urlAPI + 'mostruario-itens', {id: this.id})
-                .then(resp => {
-                    //  eslint-disable-next-line no-console
-                    console.log(resp.data.data);
-                    this.dados = resp.data.data;
-                })
+        setVendaItens() {
+            this.$http.put(this.$urlAPI + 'venda-itens', {id: this.id})
+                .then(resp => this.dados = resp.data.data)
         },
-        setColaboradores() {
-             this.$http.get(this.$urlAPI + 'colaborador')
-                .then(resp => resp.data.data.forEach(c => this.colaboradores.push({value: c.id, text: c.name})))
+        setClientes() {
+            this.$http.get(this.$urlAPI + 'cliente')
+            .then(resp => {
+                resp.data.data.forEach(c => this.clientes.push({value: c.id, text: c.nome}))
+            });
         },
-        formatDate (data_consignacao) {
-            if (!data_consignacao) return null
+        formatDate (data_venda) {
+            if (!data_venda) return null
 
-            const [year, month, day] = data_consignacao.split('-')
+            const [year, month, day] = data_venda.split('-')
             return `${day}/${month}/${year}`
         },
-        parseDate (data_consignacao) {
-            if (!data_consignacao) return null
+        parseDate (data_venda) {
+            if (!data_venda) return null
 
-            const [month, day, year] = data_consignacao.split('/')
+            const [month, day, year] = data_venda.split('/')
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         validate() {

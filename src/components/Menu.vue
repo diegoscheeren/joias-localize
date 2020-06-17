@@ -73,7 +73,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link to="">
+                <v-list-item link to="/vendas">
                     <v-list-item-action>
                         <v-icon>mdi-cash-usd-outline</v-icon>
                     </v-list-item-action>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+// import firebase from 'firebase'
 export default {
     name: 'Menu',
     data: () => ({
@@ -144,10 +144,10 @@ export default {
     props: ['usuario', 'pageTitle', 'actionBtn', 'backBtn'],
     methods: {
         logout() {
-            firebase.auth().signOut().then(() => this.$router.replace('/login'));
-            // this.$store.commit('setUsuario', null);
-            // sessionStorage.clear();
-            // this.$router.push('/login');
+            // firebase.auth().signOut().then(() => this.$router.replace('/login'));
+            this.$store.commit('setUsuario', null);
+            sessionStorage.clear();
+            this.$router.push('/login');
         },
         salvar() {
             this.$root.$refs.component.salvar && this.$root.$refs.component.salvar();

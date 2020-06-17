@@ -87,8 +87,8 @@
 <script>
 import BaseContainer from '@/components/BaseContainer'
 import utils from '../../plugins/utils';
-// import {db} from '../../firebase'
-// import firebase from 'firebase'
+import {db} from '../../firebase'
+import firebase from 'firebase'
 
 export default {
     name: 'Item',
@@ -125,7 +125,10 @@ export default {
         let dados = this.$store.getters.getData;
         this.isEdit = Object.keys(dados).length;
         this.pageTitle = this.isEdit ? 'Editar Cliente' : 'Cadastrar Cliente'
-        this.colaborador_id = this.$store.getters.getUsuarioId;
+        this.colaborador_id = firebase.auth().currentUser.uid;
+
+        //  eslint-disable-next-line no-console
+        // console.log(firebase.auth().currentUser.uid);
 
         if (this.isEdit) {
             this.id = dados.id;
@@ -174,12 +177,12 @@ export default {
                 complemento: this.complemento,
             };
 
-            // !this.id && (d.id = db.collection('clientes').doc().id);
-            // db.collection('clientes').doc(d.id)[!this.id ? 'set' : 'update'](d).then(() => this.$router.push('/clientes'));
+            !this.id && (d.id = db.collection('clientes').doc().id);
+            db.collection('clientes').doc(d.id)[!this.id ? 'set' : 'update'](d).then(() => this.$router.push('/clientes'));
 
-            this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cliente', d).then(resp => {
-                resp.data.status && this.$router.push('/clientes');
-            });
+            // this.$http[!this.id ? 'post' : 'put'](this.$urlAPI + 'cliente', d).then(resp => {
+            //     resp.data.status && this.$router.push('/clientes');
+            // });
         },
         validate() {
             const email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

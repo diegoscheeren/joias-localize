@@ -5,6 +5,9 @@
                 <v-data-table fixed-header :headers="headers" :items="dados" class="elevation-0"
                     :mobileBreakpoint="0" :loading="loading" height="430px" @click:row="editar"
                     >
+                    <template v-slot:item.data_venda="{ item }">
+                        {{`${item.data_venda.split('-')[2]}/${item.data_venda.split('-')[1]}/${item.data_venda.split('-')[0]}`}}
+                    </template>
                     <template v-slot:item.action="{ item }">
                         <v-icon small color="red" @click.stop="confirmarExclusao(item.id)">mdi-delete</v-icon>
                     </template>
@@ -35,11 +38,11 @@ export default {
         dados: [],
         dialog: false,
         excluirId: '',
-        pageTitle: 'Mostruários',
-        actionBtn: {show: true, to: '/cadastro-mostruario'},
+        pageTitle: 'Vendas',
+        actionBtn: {show: true, to: '/cadastro-venda'},
         headers: [
-            {text: 'Colaborador', value: 'colaborador.name', align: 'start'}, // start center end
-            {text: 'Status', value: 'status', align: 'center', width: '85px'},
+            {text: 'Cliente', value: 'cliente.nome', align: 'start'}, // start center end
+            {text: 'Data', value: 'data_venda', align: 'center'},
             {text: 'Excluir', value: 'action', sortable: false, align: 'center', width: '10px' },
         ],
     }),
@@ -49,7 +52,7 @@ export default {
     methods: {
         consultar() {
             this.loading = true;
-            this.$http.get(this.$urlAPI + 'mostruario')
+            this.$http.get(this.$urlAPI + 'venda')
                 .then(resp => {
                     this.loading = false;
                     this.dados = resp.data.data;
@@ -57,14 +60,14 @@ export default {
         },
         editar(row) {
             this.$store.commit('setData', {...row, ...{edit: true}});
-            this.$router.push('/cadastro-mostruario');
+            this.$router.push('/cadastro-venda');
         },
         confirmarExclusao(id) {
             this.excluirId = id;
             this.dialog = true;
         },
         excluir() {
-            this.$http.delete(this.$urlAPI + 'mostruario', {data: {id: this.excluirId}})
+            this.$http.delete(this.$urlAPI + 'venda', {data: {id: this.excluirId}})
                 .then(() => this.consultar());
             this.closeDialog();
         },

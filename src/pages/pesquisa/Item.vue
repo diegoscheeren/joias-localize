@@ -27,7 +27,7 @@
 
 <script>
 import BaseContainer from '@/components/BaseContainer'
-import {db} from '../../firebase'
+// import {db} from '../../firebase'
 
 export default {
     name: 'Item',
@@ -52,19 +52,19 @@ export default {
             this.loading = true;
             this.dados = [];
 
-            db.collection('itens').get().then((querySnapshot) => {
-                querySnapshot.docChanges().forEach(snap => {
-                    (snap.type !== 'removed') && this.dados.push(snap.doc.data());
-                });
+            // db.collection('itens').get().then((querySnapshot) => {
+            //     querySnapshot.docChanges().forEach(snap => {
+            //         (snap.type !== 'removed') && this.dados.push(snap.doc.data());
+            //     });
 
-                this.loading = false;
-            });
+            //     this.loading = false;
+            // });
 
-            // this.$http.get(this.$urlAPI + 'item')
-            //     .then(resp => {
-            //         this.loading = false;
-            //         this.dados = resp.data.data;
-            //     })
+            this.$http.get(this.$urlAPI + 'item')
+                .then(resp => {
+                    this.loading = false;
+                    this.dados = resp.data.data;
+                })
         },
         editar(row) {
             this.$store.commit('setData', row);
@@ -75,12 +75,12 @@ export default {
             this.dialog = true;
         },
         excluir() {
-            db.collection('itens').doc(this.excluirId).delete()
-            .then(() => {
-                this.consultar();
-            });
-            // this.$http.delete(this.$urlAPI + 'item', {data: {id: this.excluirId}})
-            //     .then(() => this.consultar());
+            // db.collection('itens').doc(this.excluirId).delete()
+            // .then(() => {
+            //     this.consultar();
+            // });
+            this.$http.delete(this.$urlAPI + 'item', {data: {id: this.excluirId}})
+                .then(() => this.consultar());
             this.closeDialog();
         },
         closeDialog() {
